@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  COACH
+  ABONNE
+}
+
+enum SubscriptionType {
+  STANDARD6
+  STANDARD12
+  STANDARD24
+  STANDARD48
+  VIP12
+  VIPPP16
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  SUSPENDED
+  ENDED
+}
+
+enum PhaseType {
+  DETOX
+  EQUILIBRE
+  CONSOLIDATION
+  ENTRETIEN
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  passwordHash   String
+  role           Role      @default(ABONNE)
+  firstName      String?
+  lastName       String?
+  sexe           String?   // "F", "M" ou autre valeur
+  paysOrigine    String?
+  paysResidence  String?
+  villeResidence String?
+  dateNaissance  DateTime?
+  contact        String?
+  tailleCm       Int?      // Renamed from heightCm (Float) to tailleCm (Int)
+  createdAt      DateTime  @default(now())
+
+  subscriptions Subscription[]
+  weighIns      WeighIn[]
+}
+
+model Subscription {
+  id             String             @id @default(cuid())
+  user           User               @relation(fields: [userId], references: [id])
+  userId         String
+  type           SubscriptionType
+  status         SubscriptionStatus @default(ACTIVE)
+  startDate      DateTime
+  endDate        DateTime
+  createdAt      DateTime           @default(now())
+
+  phaseSessions  PhaseSession[]
+}
+
+model PhaseSession {
+  id             String       @id @default(cuid())
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscriptionId String
+  phase          PhaseType
+  startDate      DateTime
+  endDate        DateTime
+}
+
+model Recipe {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  ingredients Json     // représentation en JSON V1
+  steps       Json     // liste d'étapes
+  calories    Int?
+  phaseTag    PhaseType
+
+  // Relations
+  menuDaysPetitDejeuner MenuDay[] @relation("PetitDejeuner")
+  menuDaysDejeuner      MenuDay[] @relation("Dejeuner")
+  menuDaysDiner         MenuDay[] @relation("Diner")
+}
+
+model MenuDay {
+  id               String   @id @default(cuid())
+  phase            PhaseType
+  semaineNumero    Int
+  jourNumero       Int // 1 to 7
+
+  petitDejeunerId  String? 
+  dejeunerId       String?
+  dinerId          String?
+
+  petitDejeuner    Recipe? @relation("PetitDejeuner", fields: [petitDejeunerId], references: [id])
+  dejeuner         Recipe? @relation("Dejeuner", fields: [dejeunerId], references: [id])
+  diner            Recipe? @relation("Diner", fields: [dinerId], references: [id])
+
+  // Relation to MenuWeek
+  menuWeekId       String?
+  menuWeek         MenuWeek? @relation(fields: [menuWeekId], references: [id])
+}
+
+model MenuWeek {
+  id            String     @id @default(cuid())
+  phase         PhaseType
+  semaineNumero Int
+  days          MenuDay[]
+}
+
+model WeighIn {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  date      DateTime
+  weightKg  Float
+  note      String?
+  createdAt DateTime @default(now())
+}
+
