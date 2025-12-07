@@ -1,7 +1,7 @@
 
 const API_URL = 'http://localhost:3001';
 
-export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
+export async function fetchAPI<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     // Ensure we are in the browser before accessing localStorage
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
@@ -22,7 +22,7 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
         throw new Error(data.message || 'Something went wrong');
     }
 
-    return data;
+    return data as T;
 }
 
 export function saveToken(token: string) {
