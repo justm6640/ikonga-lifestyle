@@ -8,7 +8,12 @@ git pull origin main
 
 # 2. Rebuild and restart containers
 echo "🐳 Rebuilding and restarting containers..."
-docker-compose -f docker-compose.prod.yml up -d --build
+if docker compose version >/dev/null 2>&1; then
+    docker compose -f docker-compose.prod.yml up -d --build
+else
+    echo "⚠️ 'docker compose' (v2) not found, using 'docker-compose' (v1). Upgrade recommended."
+    docker-compose -f docker-compose.prod.yml up -d --build
+fi
 
 # 3. Prune unused images to save space
 echo "🧹 Cleaning up old images..."
