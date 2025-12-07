@@ -3,6 +3,7 @@ const API_URL = 'http://localhost:3001';
 
 export async function fetchAPI<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     // Ensure we are in the browser before accessing localStorage
+    // Generic wrapper for type safety
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
     const headers = {
