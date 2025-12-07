@@ -1,0 +1,22 @@
+{
+    "name": "ikonga-lifestyle",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "install:backend": "cd backend && npm install",
+        "install:frontend": "cd frontend && npm install",
+        "install:all": "npm run install:backend && npm run install:frontend",
+        "build:backend": "cd backend && npm run build",
+        "build:frontend": "cd frontend && npm run build",
+        "build": "npm run build:backend && npm run build:frontend",
+        "start:backend": "cd backend && npm run start:prod",
+        "start:frontend": "cd frontend && npm start",
+        "start": "npm run start:backend & npm run start:frontend",
+        "prisma:generate": "cd backend && npx prisma generate",
+        "prisma:migrate": "cd backend && npx prisma migrate deploy"
+    },
+    "workspaces": [
+        "backend",
+        "frontend"
+    ]
+}
