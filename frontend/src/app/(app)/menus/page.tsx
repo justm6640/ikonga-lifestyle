@@ -91,8 +91,8 @@ export default function MenusPage() {
                         key={day.id}
                         onClick={() => setSelectedDay(day.jourNumero)}
                         className={`flex-shrink-0 flex flex-col items-center justify-center w-20 h-20 rounded-2xl transition-all ${selectedDay === day.jourNumero
-                                ? 'bg-gradient-to-br from-[#F79A32] to-[#E5488A] text-white shadow-lg scale-105'
-                                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'
+                            ? 'bg-gradient-to-br from-[#F79A32] to-[#E5488A] text-white shadow-lg scale-105'
+                            : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'
                             }`}
                     >
                         <span className={`text-xs font-medium mb-1 ${selectedDay === day.jourNumero ? 'opacity-90' : 'text-gray-400'}`}>
@@ -135,12 +135,12 @@ export default function MenusPage() {
                     />
                 </div>
 
-                {currentDayData.collation && (
+                {currentDayData?.collation && (
                     <div className="mt-6 pt-6 border-t border-gray-100">
                         <MealSection
                             icon="🍎"
                             label="Collation"
-                            recipe={currentDayData.collation}
+                            recipe={currentDayData?.collation}
                         />
                     </div>
                 )}

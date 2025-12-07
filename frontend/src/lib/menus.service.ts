@@ -9,12 +9,16 @@ export interface Recipe {
     // other fields omitted
 }
 
+// Alias for consistency
+export type MenuMeal = Recipe;
+
 export interface MenuDay {
     id: string;
     jourNumero: number;
-    petitDejeuner?: Recipe;
-    dejeuner?: Recipe;
-    diner?: Recipe;
+    petitDejeuner?: MenuMeal;
+    dejeuner?: MenuMeal;
+    collation?: MenuMeal;
+    diner?: MenuMeal;
 }
 
 export interface MenuWeek {
