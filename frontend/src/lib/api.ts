@@ -1,5 +1,5 @@
 
-const API_URL = 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://application.ikonga.shop/api';
 
 export async function fetchAPI<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     // Ensure we are in the browser before accessing localStorage

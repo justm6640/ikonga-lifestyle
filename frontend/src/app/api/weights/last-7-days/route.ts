@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://application.ikonga.shop/api';
         const backendUrl = `${apiUrl}/weigh-ins/last-7-days?userId=${userId}`;
 
         // Forward Authorization header if present
