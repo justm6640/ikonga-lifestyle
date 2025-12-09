@@ -125,6 +125,7 @@ model WeighIn {
   date      DateTime
   weightKg  Float
   note      String?
+  photoUrl  String?
   createdAt DateTime @default(now())
 }
 

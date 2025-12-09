@@ -8,7 +8,7 @@ import { GetWeighInsQueryDto } from './dto/get-weigh-ins.dto';
 export class WeighInsService {
     constructor(private prisma: PrismaService) { }
 
-    async createWeighIn(userId: string, data: CreateWeighInDto) {
+    async createWeighIn(userId: string, data: CreateWeighInDto & { photoUrl?: string }) {
         let date = data.date ? new Date(data.date) : new Date();
 
         // Validation: Date shouldn't be in the future (tomorrow onwards)
@@ -25,27 +25,45 @@ export class WeighInsService {
                 date: date,
                 weightKg: data.weightKg,
                 note: data.note,
+                photoUrl: data.photoUrl,
             },
         });
     }
 
 
     async getWeighIns(userId: string, options?: GetWeighInsQueryDto) {
-        const { period } = options || {};
-        let afterDate: Date | undefined;
+        const { period, startDate, endDate } = options || {};
+        let dateFilter: any = {};
+        const today = new Date();
 
-        if (period === '7d') {
-            afterDate = new Date();
-            afterDate.setDate(afterDate.getDate() - 7);
+        if (period === '3d') {
+            const threeDaysAgo = new Date();
+            threeDaysAgo.setDate(today.getDate() - 3);
+            dateFilter = { gte: threeDaysAgo };
+        } else if (period === '7d') {
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(today.getDate() - 7);
+            dateFilter = { gte: sevenDaysAgo };
         } else if (period === '30d') {
-            afterDate = new Date();
-            afterDate.setDate(afterDate.getDate() - 30);
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+            dateFilter = { gte: thirtyDaysAgo };
+        } else if (period === 'custom') {
+            if (!startDate || !endDate) {
+                throw new BadRequestException("Les dates de début et de fin sont requises pour une période personnalisée.");
+            }
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999); // Include the full end day
+            dateFilter = {
+                gte: new Date(startDate),
+                lte: end
+            };
         }
 
         return this.prisma.weighIn.findMany({
             where: {
                 userId,
-                ...(afterDate ? { date: { gte: afterDate } } : {}),
+                ...(Object.keys(dateFilter).length > 0 ? { date: dateFilter } : {}),
             },
             orderBy: { date: 'asc' },
         });
