@@ -28,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${poppins.variable} ${dmSerif.variable}`}>
-      <body className={poppins.className}>
+    <html lang="fr" className={`${poppins.variable} ${dmSerif.variable}`} suppressHydrationWarning>
+      <body className={poppins.className} suppressHydrationWarning>
         {children}
       </body>
     </html>
