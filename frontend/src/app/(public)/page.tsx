@@ -1,34 +1,14 @@
-
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import Hero from '@/components/Hero';
 
 export default function Home() {
   return (
     <div className="space-y-24">
 
       {/* HERO SECTION */}
-      <section className="text-center space-y-8 animate-fade-in-up">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-ikonga-text tracking-tight leading-tight">
-          IKONGA, ton programme <br className="hidden md:block" />
-          <span className="text-ikonga-primary">minceur et bien-être</span> sur mesure
-        </h1>
-        <p className="max-w-2xl mx-auto text-xl text-gray-500">
-          Un accompagnement complet avec menus, listes de courses, suivi du poids et communauté pour transformer votre vie durablement.
-        </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-          <Link href="/tarifs">
-            <Button variant="primary" className="text-lg px-8 py-3 w-full sm:w-auto">
-              Découvrir les tarifs
-            </Button>
-          </Link>
-          <Link href="/login">
-            <Button variant="secondary" className="text-lg px-8 py-3 w-full sm:w-auto">
-              Se connecter
-            </Button>
-          </Link>
-        </div>
-      </section>
+      <Hero />
 
       {/* HOW IT WORKS */}
       <section className="max-w-4xl mx-auto">
